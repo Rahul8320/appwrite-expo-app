@@ -1,15 +1,14 @@
 import { ID } from "react-native-appwrite";
 import { account } from "../utils/appwrite.settings";
 
-export class AppWriteService {
+export class AuthService {
   // create a new appwrite account
   async createNewAccount(name, email, password) {
     try {
       const result = await account.create(ID.unique(), email, password, name);
-      console.log(`Account created successfully! ${result}`);
       return result;
-    } catch (error) {
-      console.error("Failed to create new account: ", error);
+    } catch (err) {
+      console.log("Failed to create new account: ", err);
       return null;
     }
   }
@@ -18,14 +17,12 @@ export class AppWriteService {
   async signInToAccount(email, password) {
     try {
       const result = await account.createEmailSession(email, password);
-      console.log(`Login successfully! ${result}`);
 
       // fetch sign in user details
       const userDetails = await account.get();
-      console.log(`User Details: ${userDetails}`);
       return userDetails;
-    } catch (error) {
-      console.error("Failed to signIn: ", error);
+    } catch (err) {
+      console.log("Failed to signIn: ", err);
       return null;
     }
   }
@@ -35,8 +32,8 @@ export class AppWriteService {
     try {
       const userDetails = await account.get();
       return userDetails;
-    } catch (error) {
-      console.error("Failed to fetch user details: ", error);
+    } catch (err) {
+      console.log("Failed to fetch user details: ", err);
       return null;
     }
   }
@@ -45,10 +42,9 @@ export class AppWriteService {
   async signOut() {
     try {
       const result = await account.deleteSessions();
-      console.log(`Logout successfully! ${result}`);
       return result;
-    } catch (error) {
-      console.error("Failed to signOut: ", error);
+    } catch (err) {
+      console.log("Failed to signOut: ", err);
       return null;
     }
   }

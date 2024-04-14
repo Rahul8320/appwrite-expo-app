@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import { AppWriteService } from "../services/appwrite.service";
 import { toast } from "../utils/toast";
+import { AuthService } from "../services/auth.service";
 
 const UserContext = createContext();
 
@@ -10,7 +10,7 @@ export function useUser() {
 
 export function UserProvider({ children }) {
   const [userDetails, setUserDetails] = useState(null);
-  const appwriteService = new AppWriteService();
+  const appwriteService = new AuthService();
 
   async function login(email, password) {
     const loggedIn = await appwriteService.signInToAccount(email, password);
@@ -53,7 +53,7 @@ export function UserProvider({ children }) {
         toast("Welcome back. You are logged in");
       }
     } catch (err) {
-      console.error(err);
+      console.log(err);
       setUserDetails(null);
     }
   }

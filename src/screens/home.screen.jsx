@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Button, StyleSheet, Text, View } from "react-native";
 import { useUser } from "../contexts/userContext";
 
 const HomeScreen = () => {
@@ -8,6 +8,14 @@ const HomeScreen = () => {
   return (
     <View style={styles.container}>
       <Text>Welcome, {user.current ? user.current.name : "Please login"}</Text>
+      <View style={{ marginTop: 10 }}>
+        <Button
+          title="Logout"
+          onPress={() => {
+            user.logout();
+          }}
+        />
+      </View>
     </View>
   );
 };

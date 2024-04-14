@@ -1,8 +1,15 @@
-import { StyleSheet, Text, TextInput, Button, View } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  Button,
+  View,
+  TouchableOpacity,
+} from "react-native";
 import { useUser } from "../contexts/userContext";
 import { useState } from "react";
 
-const LoginScreen = () => {
+const LoginScreen = ({ navigation }) => {
   const user = useUser();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -30,6 +37,12 @@ const LoginScreen = () => {
             user.login(email, password);
           }}
         />
+      </View>
+      <View style={{ marginTop: 10, flexDirection: "row" }}>
+        <Text>Don't have an account, </Text>
+        <TouchableOpacity onPress={() => navigation.navigate("Register")}>
+          <Text style={{ color: "blue" }}> Register now. </Text>
+        </TouchableOpacity>
       </View>
     </View>
   );

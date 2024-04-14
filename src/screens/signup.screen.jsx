@@ -2,7 +2,7 @@ import { StyleSheet, TextInput, Text, Button, View } from "react-native";
 import { useUser } from "../contexts/userContext";
 import { useState } from "react";
 
-const SignUpScreen = () => {
+export const SignUpScreen = () => {
   const user = useUser();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");

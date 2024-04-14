@@ -3,6 +3,7 @@ import { useUser } from "./contexts/userContext";
 import { NavigationContainer } from "@react-navigation/native";
 import LoginScreen from "./screens/login.screen";
 import HomeScreen from "./screens/home.screen";
+import SignUpScreen from "./screens/signup.screen";
 
 const Stack = createNativeStackNavigator();
 
@@ -25,6 +26,11 @@ export function Router() {
             options={{ title: "Home" }}
           />
         )}
+        <Stack.Screen
+          name="Register"
+          component={SignUpScreen}
+          options={{ title: "Register" }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

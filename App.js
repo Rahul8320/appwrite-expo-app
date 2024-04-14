@@ -1,12 +1,15 @@
 import { StatusBar } from "expo-status-bar";
 import { UserProvider } from "./src/contexts/userContext";
 import { Router } from "./src/router";
+import { IdeasProvider } from "./src/contexts/ideasContext";
 
 export default function App() {
   return (
     <UserProvider>
-      <StatusBar style="auto" />
-      <Router />
+      <IdeasProvider>
+        <StatusBar style="auto" />
+        <Router />
+      </IdeasProvider>
     </UserProvider>
   );
 }
