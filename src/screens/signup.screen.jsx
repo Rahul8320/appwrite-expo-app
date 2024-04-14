@@ -2,7 +2,7 @@ import { StyleSheet, TextInput, Text, Button, View } from "react-native";
 import { useUser } from "../contexts/userContext";
 import { useState } from "react";
 
-export const SignUpScreen = () => {
+export const SignUpScreen = ({ navigation }) => {
   const user = useUser();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -32,8 +32,9 @@ export const SignUpScreen = () => {
       <View style={styles.buttonContainer}>
         <Button
           title="Register"
-          onPress={() => {
-            user.register(name, email, password);
+          onPress={async () => {
+            await user.register(name, email, password);
+            navigation.goBack();
           }}
         />
       </View>

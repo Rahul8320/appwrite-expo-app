@@ -4,6 +4,8 @@ import { NavigationContainer } from "@react-navigation/native";
 import LoginScreen from "./screens/login.screen";
 import HomeScreen from "./screens/home.screen";
 import SignUpScreen from "./screens/signup.screen";
+import { AntDesign } from "@expo/vector-icons";
+import { TouchableOpacity } from "react-native";
 
 const Stack = createNativeStackNavigator();
 
@@ -17,13 +19,22 @@ export function Router() {
           <Stack.Screen
             name="Login"
             component={LoginScreen}
-            options={{ title: "Login" }}
+            options={{
+              title: "Login",
+            }}
           />
         ) : (
           <Stack.Screen
             name="Home"
             component={HomeScreen}
-            options={{ title: "Home" }}
+            options={{
+              title: "Home",
+              headerRight: () => (
+                <TouchableOpacity onPress={() => user.logout()}>
+                  <AntDesign name="logout" size={18} color="gray" />
+                </TouchableOpacity>
+              ),
+            }}
           />
         )}
         <Stack.Screen
