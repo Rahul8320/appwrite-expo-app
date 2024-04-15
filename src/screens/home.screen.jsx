@@ -5,10 +5,14 @@ import {
   TextInput,
   Button,
   View,
+  Pressable,
+  Modal,
 } from "react-native";
 import { useUser } from "../contexts/userContext";
 import { useIdeas } from "../contexts/ideasContext";
 import { useState } from "react";
+import { toast } from "../utils/toast";
+import { AntDesign } from "@expo/vector-icons";
 
 const HomeScreen = () => {
   const user = useUser();
@@ -16,40 +20,83 @@ const HomeScreen = () => {
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const submitIdeas = () => {
+    if (title.trim().length > 0) {
+      ideas.add({
+        userId: user.current.$id,
+        title,
+        description,
+      });
+      setTitle("");
+      setDescription("");
+      setModalVisible(!modalVisible);
+    } else {
+      toast("Title can not be empty!");
+    }
+  };
 
   return (
     <ScrollView>
-      {user.current ? (
-        <View style={styles.section}>
-          <Text style={styles.header}>Submit Idea</Text>
-          <View>
-            <TextInput
-              style={styles.input}
-              placeholder="Title"
-              value={title}
-              onChangeText={(text) => setTitle(text)}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Description"
-              value={description}
-              onChangeText={(text) => setDescription(text)}
-            />
-            <Button
-              title="Submit"
-              onPress={() => {
-                ideas.add({ userId: user.current.$id, title, description });
-                setTitle("");
-                setDescription("");
-              }}
-            />
-          </View>
-        </View>
-      ) : (
-        <View style={styles.section}>
-          <Text>Please login to submit an idea.</Text>
-        </View>
-      )}
+      <View style={styles.centeredView}>
+        <Modal
+          animationType="fade"
+          transparent={false}
+          visible={modalVisible}
+          onRequestClose={() => {
+            setModalVisible(!modalVisible);
+          }}
+        >
+          {user.current ? (
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Text style={styles.header}>Submit Idea</Text>
+                  <Pressable
+                    onPress={() => setModalVisible(false)}
+                    style={{ marginTop: 7 }}
+                  >
+                    <AntDesign name="closecircleo" size={18} color="gray" />
+                  </Pressable>
+                </View>
+                <View>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Title"
+                    value={title}
+                    onChangeText={(text) => setTitle(text)}
+                  />
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Description"
+                    value={description}
+                    onChangeText={(text) => setDescription(text)}
+                  />
+                  <Button title="Submit" onPress={submitIdeas} />
+                </View>
+              </View>
+            </View>
+          ) : (
+            <View style={styles.section}>
+              <Text>Please login to submit an idea.</Text>
+            </View>
+          )}
+        </Modal>
+        <Pressable
+          style={[styles.button, styles.buttonOpen]}
+          onPress={() => setModalVisible(true)}
+        >
+          <Text style={styles.textStyle}>Add new idea</Text>
+        </Pressable>
+      </View>
+
+      {/* latest ideas section */}
       <View style={styles.section}>
         <Text style={styles.header}>Latest Ideas</Text>
         <View>
@@ -74,11 +121,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     padding: 16,
   },
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    padding: 16,
-  },
   header: {
     fontSize: 24,
     marginBottom: 20,
@@ -89,6 +131,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 10,
     paddingLeft: 8,
+    width: 300,
+    borderRadius: 10,
   },
   buttonContainer: {
     flexDirection: "row",
@@ -116,6 +160,45 @@ const styles = StyleSheet.create({
   cardDescription: {
     fontSize: 14,
     marginBottom: 8,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22,
+  },
+  modalView: {
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 25,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: "#F194FF",
+  },
+  buttonClose: {
+    backgroundColor: "#2196F3",
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center",
   },
 });
 
