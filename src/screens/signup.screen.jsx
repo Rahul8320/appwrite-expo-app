@@ -1,12 +1,30 @@
 import { StyleSheet, TextInput, Text, Button, View } from "react-native";
 import { useUser } from "../contexts/userContext";
 import { useState } from "react";
+import { toast } from "../utils/toast";
 
 export const SignUpScreen = ({ navigation }) => {
   const user = useUser();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const submitSignupHandler = async () => {
+    if (
+      name.trim().length > 0 &&
+      email.trim().length > 0 &&
+      password.trim().length > 0
+    ) {
+      if (password.trim().length >= 8) {
+        await user.register(name, email, password);
+        navigation.goBack();
+      } else {
+        toast("Password must be at least 8 characters long!");
+      }
+    } else {
+      toast("Please enter your details!");
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -30,13 +48,7 @@ export const SignUpScreen = ({ navigation }) => {
         placeholder="Enter your password"
       />
       <View style={styles.buttonContainer}>
-        <Button
-          title="Register"
-          onPress={async () => {
-            await user.register(name, email, password);
-            navigation.goBack();
-          }}
-        />
+        <Button title="Register" onPress={submitSignupHandler} />
       </View>
     </View>
   );
